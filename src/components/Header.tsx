@@ -1,13 +1,26 @@
 
 import React, { useState } from 'react';
-import { Pill, Moon, Sun, Download, BarChart3 } from 'lucide-react';
+import { Pill, Moon, Sun, Download, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { useTheme } from '@/hooks/useTheme';
+import { useAuthStore } from '@/store/authStore';
 import ExportModal from './ExportModal';
+import { useToast } from '@/hooks/use-toast';
 
 const Header = () => {
   const { theme, toggleTheme } = useTheme();
+  const { user, logout } = useAuthStore();
   const [showExport, setShowExport] = useState(false);
+  const { toast } = useToast();
+
+  const handleLogout = () => {
+    logout();
+    toast({
+      title: 'Logged Out',
+      description: 'You have been successfully logged out',
+    });
+  };
 
   return (
     <>
@@ -47,6 +60,29 @@ const Header = () => {
                   <Moon className="h-4 w-4" />
                 )}
               </Button>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    {user?.name}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem disabled>
+                    <User className="h-4 w-4 mr-2" />
+                    {user?.username}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem disabled>
+                    Role: {user?.role}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
