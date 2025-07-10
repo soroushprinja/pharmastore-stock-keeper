@@ -34,10 +34,10 @@ const ExportModal: React.FC<ExportModalProps> = ({ onClose }) => {
 
   const exportData = () => {
     const filteredData = medicines.map(medicine => {
-      const filtered: Partial<Medicine> = {};
+      const filtered: Record<string, any> = {};
       Object.keys(includeFields).forEach(field => {
         if (includeFields[field as keyof typeof includeFields]) {
-          filtered[field as keyof Medicine] = medicine[field as keyof Medicine];
+          filtered[field] = medicine[field as keyof Medicine];
         }
       });
       return filtered;
@@ -50,7 +50,7 @@ const ExportModal: React.FC<ExportModalProps> = ({ onClose }) => {
     }
   };
 
-  const exportToCSV = (data: Partial<Medicine>[]) => {
+  const exportToCSV = (data: Record<string, any>[]) => {
     if (data.length === 0) return;
 
     const headers = Object.keys(data[0]).join(',');
@@ -64,7 +64,7 @@ const ExportModal: React.FC<ExportModalProps> = ({ onClose }) => {
     downloadFile(csvContent, 'pharmacy-inventory.csv', 'text/csv');
   };
 
-  const exportToJSON = (data: Partial<Medicine>[]) => {
+  const exportToJSON = (data: Record<string, any>[]) => {
     const jsonContent = JSON.stringify(data, null, 2);
     downloadFile(jsonContent, 'pharmacy-inventory.json', 'application/json');
   };

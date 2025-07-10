@@ -91,10 +91,13 @@ const InventoryCharts: React.FC<InventoryChartsProps> = ({ medicines }) => {
               <XAxis dataKey="category" />
               <YAxis />
               <Tooltip 
-                formatter={(value, name) => [
-                  name === 'quantity' ? `${value} units` : `$${value.toFixed(2)}`,
-                  name === 'quantity' ? 'Quantity' : 'Value'
-                ]}
+                formatter={(value, name) => {
+                  const numValue = typeof value === 'number' ? value : parseFloat(value as string) || 0;
+                  return [
+                    name === 'quantity' ? `${numValue} units` : `$${numValue.toFixed(2)}`,
+                    name === 'quantity' ? 'Quantity' : 'Value'
+                  ];
+                }}
               />
               <Bar dataKey="quantity" fill="#3b82f6" name="quantity" />
             </BarChart>
@@ -165,7 +168,10 @@ const InventoryCharts: React.FC<InventoryChartsProps> = ({ medicines }) => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis type="number" />
               <YAxis dataKey="company" type="category" width={100} />
-              <Tooltip formatter={(value) => [`$${value.toFixed(2)}`, 'Value']} />
+              <Tooltip formatter={(value) => {
+                const numValue = typeof value === 'number' ? value : parseFloat(value as string) || 0;
+                return [`$${numValue.toFixed(2)}`, 'Value'];
+              }} />
               <Bar dataKey="value" fill="#10b981" />
             </BarChart>
           </ResponsiveContainer>
