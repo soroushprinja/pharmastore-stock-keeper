@@ -1,14 +1,16 @@
-
 import React from 'react';
 import { Package, AlertTriangle, Calendar, DollarSign, TrendingUp, TrendingDown } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Medicine } from '@/types/medicine';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface DashboardStatsProps {
   medicines: Medicine[];
 }
 
 const DashboardStats: React.FC<DashboardStatsProps> = ({ medicines }) => {
+  const { formatPrice } = useCurrency();
+  
   const totalMedicines = medicines.length;
   const totalValue = medicines.reduce((sum, medicine) => sum + (medicine.quantity * medicine.price), 0);
   
@@ -42,7 +44,7 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({ medicines }) => {
     },
     {
       title: 'Total Inventory Value',
-      value: `$${totalValue.toFixed(2)}`,
+      value: formatPrice(totalValue),
       icon: DollarSign,
       color: 'text-green-600',
       bgColor: 'bg-green-100 dark:bg-green-900',

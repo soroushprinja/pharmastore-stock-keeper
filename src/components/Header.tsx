@@ -1,97 +1,50 @@
 
-import React, { useState } from 'react';
-import { Pill, Moon, Sun, Download, LogOut, User } from 'lucide-react';
+import React from 'react';
+import { Activity, Settings, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
-import { useTheme } from '@/hooks/useTheme';
-import { useAuthStore } from '@/store/authStore';
-import ExportModal from './ExportModal';
-import { useToast } from '@/hooks/use-toast';
+import CurrencySelector from '@/components/CurrencySelector';
 
-const Header = () => {
-  const { theme, toggleTheme } = useTheme();
-  const { user, logout } = useAuthStore();
-  const [showExport, setShowExport] = useState(false);
-  const { toast } = useToast();
+interface HeaderProps {
+  onShowSettings?: () => void;
+}
 
-  const handleLogout = () => {
-    logout();
-    toast({
-      title: 'Logged Out',
-      description: 'You have been successfully logged out',
-    });
-  };
-
+const Header: React.FC<HeaderProps> = ({ onShowSettings }) => {
   return (
-    <>
-      <header className="bg-white dark:bg-gray-800 shadow-md border-b border-blue-100 dark:border-gray-700">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="bg-blue-600 p-2 rounded-lg">
-                <Pill className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">PharmaCare</h1>
-                <p className="text-sm text-gray-600 dark:text-gray-300">Inventory Management System</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowExport(true)}
-                className="flex items-center gap-2"
-              >
-                <Download className="h-4 w-4" />
-                Export
-              </Button>
-              
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={toggleTheme}
-                className="flex items-center gap-2"
-              >
-                {theme === 'dark' ? (
-                  <Sun className="h-4 w-4" />
-                ) : (
-                  <Moon className="h-4 w-4" />
-                )}
-              </Button>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="flex items-center gap-2">
-                    <User className="h-4 w-4" />
-                    {user?.name}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem disabled>
-                    <User className="h-4 w-4 mr-2" />
-                    {user?.username}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem disabled>
-                    Role: {user?.role}
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout} className="text-red-600">
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+    <header className="bg-white dark:bg-gray-800 shadow-sm border-b">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          <div className="flex items-center">
+            <div className="flex-shrink-0 flex items-center">
+              <Activity className="h-8 w-8 text-blue-600" />
+              <h1 className="ml-2 text-xl font-bold text-gray-900 dark:text-white">
+                PharmaStore
+              </h1>
             </div>
           </div>
+          
+          <div className="flex items-center space-x-4">
+            <CurrencySelector />
+            
+            {onShowSettings && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onShowSettings}
+                className="flex items-center gap-2"
+              >
+                <Settings className="h-4 w-4" />
+                Settings
+              </Button>
+            )}
+            
+            <Button variant="ghost" size="sm" className="flex items-center gap-2">
+              <User className="h-4 w-4" />
+              Profile
+            </Button>
+          </div>
         </div>
-      </header>
-
-      {showExport && (
-        <ExportModal onClose={() => setShowExport(false)} />
-      )}
-    </>
+      </div>
+    </header>
   );
 };
 

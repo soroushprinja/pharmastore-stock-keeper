@@ -1,15 +1,16 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AlertTriangle, TrendingUp, TrendingDown, Calendar, DollarSign } from 'lucide-react';
 import { Medicine } from '@/types/medicine';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface AdvancedAnalyticsProps {
   medicines: Medicine[];
 }
 
 const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({ medicines }) => {
+  const { formatPrice } = useCurrency();
   const currentDate = new Date();
   
   // Calculate insights
@@ -52,7 +53,7 @@ const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({ medicines }) => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Total Inventory Value</p>
-                <p className="text-2xl font-bold text-green-600">${totalValue.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-green-600">{formatPrice(totalValue)}</p>
               </div>
               <DollarSign className="h-8 w-8 text-green-600" />
             </div>
@@ -64,7 +65,7 @@ const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({ medicines }) => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Average Price/Unit</p>
-                <p className="text-2xl font-bold text-blue-600">${avgPrice.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-blue-600">{formatPrice(avgPrice)}</p>
               </div>
               <TrendingUp className="h-8 w-8 text-blue-600" />
             </div>
@@ -111,7 +112,7 @@ const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({ medicines }) => {
                   </Badge>
                   <span className="font-medium">{company}</span>
                 </div>
-                <span className="font-bold text-green-600">${value.toFixed(2)}</span>
+                <span className="font-bold text-green-600">{formatPrice(value)}</span>
               </div>
             ))}
           </div>
@@ -137,8 +138,8 @@ const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({ medicines }) => {
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="font-bold text-green-600">${med.totalValue.toFixed(2)}</span>
-                  <p className="text-sm text-gray-600">{med.quantity} × ${med.price}</p>
+                  <span className="font-bold text-green-600">{formatPrice(med.totalValue)}</span>
+                  <p className="text-sm text-gray-600">{med.quantity} × {formatPrice(med.price)}</p>
                 </div>
               </div>
             ))}
