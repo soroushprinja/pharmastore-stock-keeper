@@ -51,7 +51,6 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                 <SelectValue placeholder="All categories" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All categories</SelectItem>
                 {MEDICINE_CATEGORIES.map((category) => (
                   <SelectItem key={category} value={category}>
                     {category}
